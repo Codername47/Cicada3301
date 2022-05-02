@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello MainController!{% endblock %}
+{% block stylesheets %}
+    <link rel="stylesheet" href={{ asset('css/index.css') }}> {% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/index.js') }}"></script>
+{% endblock %}
+{% block body %}
+<body>
+<div class="login-box">
+    <h2>Login</h2>
+    <form data-auth={{ path('app_login')}} data-reg={{ path('app_register')}} action={{ path('app_login')}} method="POST" name="form2">
+        <div class="user-box">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+            <input type="text" name="username" required="" value="{{ last_username }}">
+            <label>Username</label>
+            <h5>Некорректный ник</h5>
+            <h5>Такой никнейм уже есть!</h5>
+        </div>
+        <div class="user-box">
+            <input type="password" name="password" required="">
+            <label>Password</label>
+            <h5>Некорректный пароль</h5>
+        </div>
+        <div class="user-box">
+            <input type="password" name="CPassword" required="">
+            <label>Confirm Password</label>
+            <h5>Пароли не совпадают</h5>
+        </div>
+        <div class="flex-box">
+            <a href="javascript:document.form2.submit();" class="log" name="sub">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                Submit
+            </a><div class="space-between"> </div>
+            <a href="#" class="reg">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>Register
+            </a>
+        </div>
+    </form>
+    <div class="errMsg">{% if error %}{{ error.messageKey|trans(error.messageData, 'security') }}{% endif %}</div>
+    <div class="sucMsg"></div>
+</div>
+{% endblock %}
+
