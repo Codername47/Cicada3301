@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cicada{% endblock %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('GameFiles/css/nothing.css') }}">
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('GameFiles/js/nothing.js') }}"></script>
+{% endblock %}
+{% block body %}
+    <div id="page-preloader"><span class="spinner"></span></div>
+    <iframe class="rick" width="560" height="315" src="https://youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    <p class="string">Second part of code: RMK2</p>
+    <div class="rickText1">You've got</div>
+    <div class="rickText2">Rickrolled</div>
+    <script>console.log("{{ message }}")</script>
+{% endblock %}

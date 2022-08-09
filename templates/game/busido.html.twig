@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cicada{% endblock %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('GameFiles/css/busido.css') }}">
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('GameFiles/js/busido.js') }}"></script>
+{% endblock %}
+{% block body %}
+    <img src="{{ asset('GameFiles/img/jak1.jpg') }}" class="jak">
+    <p class="string">Чыкны ци фжйчт кчшщчъ</p>
+    <form class="form">
+        <a class="enterText">Ваш ответ?</a>
+        <input type="text" disabled=true class="enter">
+        <a class="timer"></a>
+    </form>
+    <script>console.log("{{ message }}")</script>
+{% endblock %}

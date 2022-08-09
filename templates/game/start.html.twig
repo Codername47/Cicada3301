@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cicada{% endblock %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('GameFiles/css/start.css') }}">
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('GameFiles/js/start.js') }}"></script>
+{% endblock %}
+{% block body %}
+    <div class="header">
+        <span class="logo1">
+             ☠Cicada☠
+        </span>
+        <form class="text1">
+            <!-- Have fun:)  -->
+            <textarea class="textar">
+            </textarea>
+        </form>
+        <img class="logo" src="">
+    </div>
+    <script>console.log("{{ message }}")</script>
+{% endblock %}

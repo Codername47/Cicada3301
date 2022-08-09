@@ -4,7 +4,15 @@ namespace App\Entity;
 
 use App\Repository\AchievedFlagRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use App\Validator as AcmeAsset;
 
+#[AcmeAsset\NewFlagConstraint]
+#[UniqueEntity(
+    fields: ['user', 'levelFlag'],
+    message: 'This flag already reached by this user.',
+    errorPath: 'levelFlag',
+)]
 #[ORM\Entity(repositoryClass: AchievedFlagRepository::class)]
 class AchievedFlag
 {
@@ -21,11 +29,16 @@ class AchievedFlag
     #[ORM\JoinColumn(nullable: false)]
     private $levelFlag;
 
-    #[ORM\Column(type: 'datetime')]
+    #[ORM\Column(type: 'datetime', columnDefinition: "DATETIME on update CURRENT_TIMESTAMP")]
     private $dateAchieve;
 
     #[ORM\Column(type: 'dateinterval')]
     private $totalTime;
+
+    public function __construct()
+    {
+        $this->dateAchieve = new \DateTime();
+    }
 
     public function getId(): ?int
     {
@@ -68,15 +81,17 @@ class AchievedFlag
         return $this;
     }
 
-    public function getTotalTime(): ?\DateInterval
+    public function getTotalTime(): string
     {
-        return $this->totalTime;
+        return $this->totalTime->format("%y years, %m month, %d days, %h hours, %m minutes, %s seconds");
     }
 
-    public function setTotalTime(\DateInterval $totalTime): self
+    public function calculateTotalTime(): self
     {
-        $this->totalTime = $totalTime;
-
+        $achieveTime = $this->getDateAchieve();
+        $dateOfReg = $this->getUser()->getUserInfo()->getRegistrationDate();
+        $this->totalTime = $achieveTime->diff($dateOfReg);
         return $this;
     }
+
 }

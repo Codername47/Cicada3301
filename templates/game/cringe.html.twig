@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cicada{% endblock %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('GameFiles/css/cringe.css') }}">
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('GameFiles/js/cringe.js') }}"></script>
+{% endblock %}
+{% block body %}
+    <form class="form">
+        <label class="enterText">Your Key:</label>
+        <input type="text" class="enter" name="key">
+        <button type="submit">Send</button>
+    </form>
+    <script>console.log("{{ message }}")</script>
+{% endblock %}

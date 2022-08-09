@@ -4,17 +4,73 @@ html {
 body {
   margin:0;
   padding:0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
   font-family: sans-serif;
   background: linear-gradient(#141e30, #243b55);
+  color: white;
+  height: 100%;
+}
+
+button {
+  all: unset;
+  width: -moz-available;
+  cursor: pointer;
+}
+
+ul {
+  color: whitesmoke;
+  text-align: right;
+}
+
+main {
+  display: flex;
+  position: relative;
+  height: 100%;
+}
+
+header {
+  padding: 0 30px;
+  position: sticky;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+
+  top: 0;
+}
+
+.logout {
+  text-decoration: none;
+  transition: .5s;
+  color: white;
+
+}
+
+.username {
+  color: white;
+}
+
+.logout:hover
+{
+  color: #03e9f4;
+}
+
+.back {
+  margin-right: auto;
+  height: 50px;
+}
+.back svg{
+  height: 100%;
 }
 
 .userdata-box {
-  position: absolute;
-  top: 50%;
-  left: 20%;
+  margin: auto;
+  align-self: center;
+  display: flex;
+  flex-direction: column;
   width: 400px;
   padding: 40px;
-  transform: translate(-50%, -50%);
   background: rgba(0,0,0,.5);
   box-sizing: border-box;
   box-shadow: 0 15px 25px rgba(0,0,0,.6);
@@ -43,7 +99,7 @@ body {
 .userdata-box form{
     margin-bottom: 20px;
 }
-.userdata-box form a{
+.userdata-box form a, button{
 
   position: relative;
   display: flex;
@@ -56,13 +112,12 @@ body {
   overflow: hidden;
   transition: .5s;
   margin: 0 0 0 auto;
-  margin-top: 40px;
   letter-spacing: 4px;
   justify-content: center;
   border: 1px solid;
   border-radius: 5px;
 }
-.userdata-box form a:hover {
+.userdata-box form a:hover, button:hover {
   background: #03e9f4;
   color: #fff;
   border-radius: 5px;
@@ -99,3 +154,8 @@ body {
   font-size: 12px;
 }
 
+.alertMsg {
+  text-align: center;
+  font-size: 12px;
+  color: red;
+}

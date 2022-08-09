@@ -17,11 +17,14 @@ class UserInfo
     private $name = "Anonymous";
 
     #[ORM\Column(type: 'datetime')]
-    private $lastOnline;
+    private $registrationDate;
+
+    #[ORM\OneToOne(mappedBy: 'userInfo', targetEntity: User::class, cascade: ['persist', 'remove'])]
+    private $user;
 
     public function __construct()
     {
-        $this->lastOnline = new \DateTime();
+        $this->registrationDate = new \DateTime();
     }
 
     public function getId(): ?int
@@ -41,14 +44,31 @@ class UserInfo
         return $this;
     }
 
-    public function getLastOnline(): ?\DateTimeInterface
+    public function getRegistrationDate(): ?\DateTimeInterface
     {
-        return $this->lastOnline;
+        return $this->registrationDate;
     }
 
-    public function setLastOnline(\DateTimeInterface $lastOnline): self
+    public function setRegistrationDate(\DateTimeInterface $registrationDate): self
     {
-        $this->lastOnline = $lastOnline;
+        $this->registrationDate = $registrationDate;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(User $user): self
+    {
+        // set the owning side of the relation if necessary
+        if ($user->getUserInfo() !== $this) {
+            $user->setUserInfo($this);
+        }
+
+        $this->user = $user;
 
         return $this;
     }

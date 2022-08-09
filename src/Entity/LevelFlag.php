@@ -6,6 +6,7 @@ use App\Repository\LevelFlagRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: LevelFlagRepository::class)]
 class LevelFlag
@@ -15,7 +16,7 @@ class LevelFlag
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    #[ORM\ManyToOne(targetEntity: level::class, inversedBy: 'levelFlags')]
+    #[ORM\ManyToOne(targetEntity: Level::class, inversedBy: 'levelFlags')]
     #[ORM\JoinColumn(nullable: false)]
     private $level;
 
@@ -28,9 +29,17 @@ class LevelFlag
     #[ORM\OneToMany(mappedBy: 'levelFlag', targetEntity: AchievedFlag::class, orphanRemoval: true)]
     private $achievedFlags;
 
-    #[ORM\OneToOne(targetEntity: LevelFlagInfo::class, cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
-    private $levelFlagInfo;
+    #[ORM\OneToOne(inversedBy: 'levelFlag', targetEntity: JsContent::class, cascade: ["persist", "remove"])]
+    #[ORM\JoinColumn(nullable: true, onDelete: "SET NULL")]
+    private $jsContent;
+
+    #[ORM\OneToMany(mappedBy: 'levelFlag', targetEntity: Content::class, orphanRemoval: true)]
+    private $contents;
+
+    public function __toString(): string
+    {
+        return $this->name." (".$this->getLevel()->getName().")";
+    }
 
     public function __construct()
     {
@@ -108,15 +117,48 @@ class LevelFlag
         return $this;
     }
 
-    public function getLevelFlagInfo(): ?LevelFlagInfo
+
+
+    public function getJsContent(): ?jsContent
     {
-        return $this->levelFlagInfo;
+        return $this->jsContent;
     }
 
-    public function setLevelFlagInfo(LevelFlagInfo $levelFlagInfo): self
+    public function setJsContent(jsContent $jsContent): self
     {
-        $this->levelFlagInfo = $levelFlagInfo;
+        $this->jsContent = $jsContent;
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Content>
+     */
+    public function getContents(): ?Collection
+    {
+        return $this->contents;
+    }
+
+    public function addContent(Content $content): self
+    {
+        if (!$this->contents->contains($content)) {
+            $this->contents[] = $content;
+            $content->setLevelFlag($this);
+        }
+
+        return $this;
+    }
+
+    public function removeContent(Content $content): self
+    {
+        if ($this->contents->removeElement($content)) {
+            // set the owning side to null (unless already changed)
+            if ($content->getLevelFlag() === $this) {
+                $content->setLevelFlag(null);
+            }
+        }
+
+        return $this;
+    }
+
 }

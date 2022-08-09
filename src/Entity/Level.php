@@ -6,7 +6,10 @@ use App\Repository\LevelRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
+#[UniqueEntity(fields: ['nextLevel'], message: 'This Level Are Already Linked')]
 #[ORM\Entity(repositoryClass: LevelRepository::class)]
 class Level
 {
@@ -27,10 +30,22 @@ class Level
     #[ORM\OneToMany(mappedBy: 'level', targetEntity: LevelFlag::class, orphanRemoval: true)]
     private $levelFlags;
 
+    #[ORM\OneToMany(mappedBy: 'level', targetEntity: Message::class, orphanRemoval: true)]
+    private $messages;
+
+    #[ORM\OneToOne(targetEntity: self::class, cascade: ['persist', 'remove'])]
+    private $nextLevel;
+
     public function __construct()
     {
         $this->achievedLevels = new ArrayCollection();
         $this->levelFlags = new ArrayCollection();
+        $this->messages = new ArrayCollection();
+    }
+
+    public function __toString(): string
+    {
+        return $this->getName();
     }
 
     public function getId(): ?int
@@ -118,6 +133,48 @@ class Level
                 $levelFlag->setLevel(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Message>
+     */
+    public function getMessages(): Collection
+    {
+        return $this->messages;
+    }
+
+    public function addMessage(Message $message): self
+    {
+        if (!$this->messages->contains($message)) {
+            $this->messages[] = $message;
+            $message->setLevel($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMessage(Message $message): self
+    {
+        if ($this->messages->removeElement($message)) {
+            // set the owning side to null (unless already changed)
+            if ($message->getLevel() === $this) {
+                $message->setLevel(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getNextLevel(): ?self
+    {
+        return $this->nextLevel;
+    }
+
+    public function setNextLevel(?self $nextLevel): self
+    {
+        $this->nextLevel = $nextLevel;
 
         return $this;
     }

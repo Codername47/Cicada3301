@@ -8,6 +8,11 @@ body {
   background: linear-gradient(#141e30, #243b55);
 }
 
+ul {
+  color: whitesmoke;
+  text-align: right;
+}
+
 .login-box {
   position: absolute;
   top: 50%;
@@ -28,7 +33,6 @@ body {
     margin: 0 0 0 0;
 }
 .sucMsg{
-    display: none;
     color: #0f0;
     margin: 0 0 0 0;
 }
@@ -50,9 +54,6 @@ body {
   transform: translateY(0);
   -webkit-transition: all 0.5s ease-in-out;
   transition: all 0.5s ease-in-out;
-}
-.login-box .user-box:nth-child(3){
-	display: none;
 }
 .hiding{
 	visibility: hidden;
@@ -95,6 +96,14 @@ body {
   color: #03e9f4;
   font-size: 12px;
 }
+
+.login-box .user-box input:not([type="checkbox"]):not(:placeholder-shown):invalid ~ label {
+  top: -20px;
+  left: 0;
+  color: #ad2424;
+  font-size: 12px;
+}
+
 .login-box form .flex-box
 {
   display: flex;
@@ -110,7 +119,7 @@ body {
 	flex: 2;
 	justify-content: flex-center;
 }
-.login-box form .log {
+.login-box form .but {
   
   
   position: relative;
@@ -129,24 +138,7 @@ body {
   justify-content: center;
   
 }
-.login-box form .reg {
-  position: relative;
-  display: flex;
-  padding: 10px 20px;
-  color: #03e9f4;
-  font-size: 16px;
-  text-decoration: none;
-  text-transform: uppercase;
-  text-align: justify;
-  overflow: hidden;
-  transition: .5s;
-  margin: 0 0 0 auto;
-  margin-top: 40px;
-  letter-spacing: 4px;
-  flex: 5;
-  flex-basis: 0px;
-  justify-content: center;
-}
+
 
 .login-box a:hover {
   background: #03e9f4;

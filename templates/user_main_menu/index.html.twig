@@ -2,33 +2,46 @@
 
 {% block title %}Cicada3301{% endblock %}
 {% block javascripts %}
-    <script src=""></script>
+    {{ parent() }}
+    <script src={{ asset('js/main.js') }}></script>
+{% endblock %}
+{% block stylesheets %}
+    <link rel="stylesheet" href={{ asset('css/main.css') }}>
 {% endblock %}
 {% block body %}
     <div class="menu-box">
         <div class="flex-box">
-            <a href="http://s93577.hostru09.fornex.host/start.php" class="start">
+            {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('admin') }}" class="admin">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    Панель администратора
+                </a><div class="space-between"> </div>
+            {% endif %}
+            <a href="{{ path('app_first_level') }}" class="start">
                 <span></span>
                 <span></span>
                 <span></span>
                 <span></span>
                 Начать путь
             </a><div class="space-between"> </div>
-            <a href="http://s93577.hostru09.fornex.host/achievements.php" class="acieve">
+            <a href="{{ path('app_user_mindmap') }}" class="achieve">
                 <span></span>
                 <span></span>
                 <span></span>
                 <span></span>
                 Навигация
             </a><div class="space-between"> </div>
-            <a href="http://s93577.hostru09.fornex.host/settings.php" class="settings">
+            <a href={{ path('app_user_settings') }} class="settings">
                 <span></span>
                 <span></span>
                 <span></span>
                 <span></span>
                 Настройки
             </a><div class="space-between"> </div>
-            <a href="http://s93577.hostru09.fornex.host/logout.php" class="logout">
+            <a href={{ path('app_logout')}} class="logout">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -37,5 +50,9 @@
             </a>
         </div>
     </div>
-    <script src="js/main.js"></script>
+<div class="sucMsg">
+    {% for flash in app.flashes('success') %}
+        {{ flash }}
+    {% endfor %}
+</div>
 {% endblock %}

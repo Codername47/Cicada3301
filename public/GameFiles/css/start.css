@@ -1,0 +1,48 @@
+.bod{
+    background-color: black;
+}
+body{
+    background: black;
+}
+
+.header .text1{
+  display: inline-block;
+  position: absolute;
+  z-index: 100;
+  margin: 120px 70px;
+  word-wrap: break-word;
+  width: 1px;
+  line-height: 150%;
+}
+.textar{
+    
+    width: 600px;
+    height:300px;
+    z-index: 100;
+    background: #000;
+    padding:30px;
+    font-size: 9pt;
+    font-family: fixedsys, LucidaTerminal, monospace;
+    color: #909090;
+    text-align: left;
+    overflow: auto;
+    border: 3px solid #130;
+}
+.header .logo{
+  position: absolute;
+  z-index: 50;
+  width: 65px;
+  margin: 150px 150px;
+}
+.header .logo1{
+  display: inline-block;
+  position: absolute;
+  color: red;
+  font-size: 4em;
+  letter-spacing: 0.3em;
+  text-align: right;
+  font-family: Courier;
+  left: 20%;
+  border: 2px solid;
+  padding: 0px 30px;
+}

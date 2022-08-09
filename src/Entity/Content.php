@@ -16,13 +16,18 @@ class Content
     #[ORM\Column(type: 'string', length: 255)]
     private $url;
 
-    #[ORM\ManyToOne(targetEntity: LevelFlagInfo::class, inversedBy: 'contents')]
-    #[ORM\JoinColumn(nullable: false)]
-    private $levelFlagInfo;
+    #[ORM\ManyToOne(targetEntity: LevelFlag::class, inversedBy: 'contents')]
+    #[ORM\JoinColumn(nullable: true)]
+    private $levelFlag;
 
     #[ORM\ManyToOne(targetEntity: ContentType::class, inversedBy: 'contents')]
     #[ORM\JoinColumn(nullable: false)]
     private $contentType;
+
+    public function __toString(): string
+    {
+        return $this->getUrl();
+    }
 
     public function getId(): ?int
     {
@@ -41,14 +46,14 @@ class Content
         return $this;
     }
 
-    public function getLevelFlagInfo(): ?LevelFlagInfo
+    public function getLevelFlag(): ?LevelFlag
     {
-        return $this->levelFlagInfo;
+        return $this->levelFlag;
     }
 
-    public function setLevelFlagInfo(?LevelFlagInfo $levelFlagInfo): self
+    public function setLevelFlag(?LevelFlag $levelFlag): self
     {
-        $this->levelFlagInfo = $levelFlagInfo;
+        $this->levelFlag = $levelFlag;
 
         return $this;
     }

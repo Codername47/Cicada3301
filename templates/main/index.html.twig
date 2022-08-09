@@ -8,36 +8,31 @@
     <script src="{{ asset('js/index.js') }}"></script>
 {% endblock %}
 {% block body %}
-<body>
-<div class="login-box">
+<body data-failed={{ regFailed }}>
+<div class="login-box aut">
     <h2>Login</h2>
     <form data-auth={{ path('app_login')}} data-reg={{ path('app_register')}} action={{ path('app_login')}} method="POST" name="form2">
         <div class="user-box">
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-            <input type="text" name="username" required="" value="{{ last_username }}">
+            <input type="text" name="username" required="" placeholder="" value={{ last_username }}>
             <label>Username</label>
             <h5>Некорректный ник</h5>
             <h5>Такой никнейм уже есть!</h5>
         </div>
         <div class="user-box">
-            <input type="password" name="password" required="">
+            <input type="password" name="password" required="" placeholder="">
             <label>Password</label>
             <h5>Некорректный пароль</h5>
         </div>
-        <div class="user-box">
-            <input type="password" name="CPassword" required="">
-            <label>Confirm Password</label>
-            <h5>Пароли не совпадают</h5>
-        </div>
         <div class="flex-box">
-            <a href="javascript:document.form2.submit();" class="log" name="sub">
+            <a href="javascript:document.form2.submit();" class="log but" name="sub">
                 <span></span>
                 <span></span>
                 <span></span>
                 <span></span>
                 Submit
             </a><div class="space-between"> </div>
-            <a href="#" class="reg">
+            <a href="#" class="toReg but">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -45,7 +40,51 @@
             </a>
         </div>
     </form>
-    <div class="errMsg">{% if error %}{{ error.messageKey|trans(error.messageData, 'security') }}{% endif %}</div>
+    <div class="errMsg">
+        {% for flash in app.flashes('error') %}
+            {{ flash }}
+        {% endfor %}
+        {% if error %}{{ error.messageKey|trans(error.messageData, 'security') }}{% endif %}</div>
+    <div class="sucMsg">
+        {% for flash in app.flashes('success') %}
+            {{ flash }}
+        {% endfor %}
+    </div>
+</div>
+<div class="login-box reg">
+    <h2>Register</h2>
+    {{ form_start(registrationForm, {'attr': {"action" : path('app_register')}}) }}
+        <div class="user-box">
+            {{ form_row(registrationForm.email) }}
+        </div>
+        <div class="user-box">
+            {{ form_row(registrationForm.username) }}
+        </div>
+        <div class="user-box">
+            {{ form_row(registrationForm.plainPassword, {
+                label: "Password"
+            }) }}
+        </div>
+        <div class="user-box">
+            {{ form_row((registrationForm.agreeTerms)) }}
+        </div>
+        <div class="flex-box">
+            <a href="javascript:document.registration_form.submit();" class="register but" name="sub">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                Submit
+            </a><div class="space-between"> </div>
+            <a href="#" class="toAuto but">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>Back to Login
+            </a>
+        </div>
+    {{ form_end(registrationForm) }}
+    <div class="errMsg"></div>
     <div class="sucMsg"></div>
 </div>
 {% endblock %}
