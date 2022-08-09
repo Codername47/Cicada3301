@@ -1,0 +1,78 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello UserFragmentsController!{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('select2/dist/js/select2.js') }}"></script>
+{% endblock %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('select2/dist/css/select2.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/fragments.css') }}">
+{% endblock %}
+
+{% block body %}
+    <header class="navigate user">
+        <a class="back" href={{ path('app_user_mindmap') }}>
+            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                 viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
+                    <g>
+                        <g>
+                            <path d="M0,0v512h512V0H0z M384,277.333H179.499l48.917,48.917c8.341,8.341,8.341,21.824,0,30.165
+                                c-4.16,4.16-9.621,6.251-15.083,6.251c-5.461,0-10.923-2.091-15.083-6.251l-85.333-85.333c-1.963-1.963-3.52-4.309-4.608-6.933
+                                c-2.155-5.205-2.155-11.093,0-16.299c1.088-2.624,2.645-4.971,4.608-6.933l85.333-85.333c8.341-8.341,21.824-8.341,30.165,0
+                                s8.341,21.824,0,30.165l-48.917,48.917H384c11.776,0,21.333,9.557,21.333,21.333S395.776,277.333,384,277.333z"/>
+                        </g>
+                    </g>
+            </svg>
+        </a>
+        <div class="username">Hello, {{ user_info.name }}</div>
+        <a class="logout" href={{ path('app_logout') }}>Выйти</a>
+    </header>
+    <h2>Фрагменты памяти</h2>
+    <div class="user-box">
+        <select name="itemlist" id="itemlist" class="dropdown">
+            //<option value="">Все уровни</option>
+            {% for acLevel in achievedLevels %}
+            <option value="{{ acLevel.level }}">{{ acLevel.level }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="items-container">
+        {% for flag in achievedFlags %}
+            {% for item in flag.levelFlag.contents %}
+                    <div class="item-container {{ flag.levelFlag.level }}">
+                        <a href="{{ item.url }}" download="{{ item.url }}">
+                            <img class="icon" src="{{ item.contentType.icon }}">
+                            <div class="url">{{ item.url }}</div>
+                        </a>
+                    </div>
+            {% endfor %}
+        {% endfor %}
+    </div>
+    <script>
+        $(function (){
+            $("#itemlist").select2();
+            $('#itemlist').on('select2:select', function (e) {
+                if ($("#itemlist").val() == "") {
+                    $('.item-container').show();
+                    return
+                }
+
+                $('.item-container').hide();
+                $("."+$("#itemlist").val()).show();
+            })
+            let hover = new Audio("/mp3/achv_pagina_7dl.ogg");
+            let click = new Audio("/mp3/achv_click_7dl.ogg");
+            let background = new Audio("/mp3/breath_again_7dl.ogg");
+            background.loop = true;
+            background.play();
+            $('.item-container').hover(function (){
+                hover.play();
+            })
+            $('.item-container').mousedown(function (){
+                click.play();
+            })
+        })
+    </script>
+{% endblock %}

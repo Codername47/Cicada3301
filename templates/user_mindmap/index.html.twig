@@ -1,0 +1,112 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello UserMindmapController!{% endblock %}
+
+{% block javascripts %}
+    <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
+    <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
+    {{ parent() }}
+    <script src="{{ asset('js/linemaker/leader-line.min.js') }}"></script>
+{% endblock %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/mindmap.css') }}">
+{% endblock %}
+
+{% block body %}
+    <header class="navigate user">
+        <a class="back" href={{ path('app_user_main_menu') }}>
+            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                 viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
+                    <g>
+                        <g>
+                            <path d="M0,0v512h512V0H0z M384,277.333H179.499l48.917,48.917c8.341,8.341,8.341,21.824,0,30.165
+                                c-4.16,4.16-9.621,6.251-15.083,6.251c-5.461,0-10.923-2.091-15.083-6.251l-85.333-85.333c-1.963-1.963-3.52-4.309-4.608-6.933
+                                c-2.155-5.205-2.155-11.093,0-16.299c1.088-2.624,2.645-4.971,4.608-6.933l85.333-85.333c8.341-8.341,21.824-8.341,30.165,0
+                                s8.341,21.824,0,30.165l-48.917,48.917H384c11.776,0,21.333,9.557,21.333,21.333S395.776,277.333,384,277.333z"/>
+                        </g>
+                    </g>
+            </svg>
+        </a>
+        <div class="username">Hello, {{ user_info.name }}</div>
+        <a class="logout" href={{ path('app_logout') }}>Выйти</a>
+    </header>
+    <h2>Карта достижений</h2>
+    <a href="{{ path('app_user_fragments') }}" class="a-abs">К фрагментам памяти</a>
+    {% for acLevel in levels %}
+        <a href="{{ acLevel.level.url }}"><div class="level-box {{ acLevel.level|replace({' ': ''}) }}">{{ acLevel.level }}</div></a>
+        <script>
+            $(function (){
+                tippy(".{{ acLevel.level|replace({' ': ''}) }}", {
+                    interactive: true,
+                    content: "{{acLevel.level}}. Дата получения: {{ acLevel.dateAchieve|date }}. Всего времени ушло: {{ acLevel.totalTime }}",
+                });
+            })
+        </script>
+        <div class="achieve-box-container ac{{ loop.index }}">
+            {% for acFlag in flags %}
+                {% if acFlag.levelflag.level == acLevel.level %}
+                    <div data-html="true" class="achieve-box p{{ acFlag.levelFlag.id}}">
+                        <img src="{{ acFlag.levelFlag.achieveImage }}" alt="{{ asset('GameFiles/ach/no_foto.png') }}" class="ach-icon">
+                    </div>
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function(event) {
+                            tippy(".p{{ acFlag.levelFlag.id}}", {
+                                interactive: true,
+                                content: "{{acFlag.levelFlag}}. Дата получения: {{ acFlag.dateAchieve|date }}. Всего времени ушло: {{ acFlag.totalTime }}",
+                        });
+                        })
+                    </script>
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endfor %}
+    <script>
+        tippy('.e1', {
+            content: "I'm a Tippy tooltip!",
+        });
+        let file1 = "{{ asset('mp3/ambience_safe_7dl.ogg') }}";
+        let file2 = "{{ asset('mp3/achv_info.ogg') }}"
+        let backhall_7dl = new Audio(file1);
+        let hoverAchieve = new Audio(file2);
+        backhall_7dl.loop = true;
+        backhall_7dl.play();
+        $('.achieve-box').hover(function (){
+            hoverAchieve.play();
+        })
+        $('.level-box').hover(function (){
+            hoverAchieve.play();
+        })
+        let levels =document.querySelectorAll(".level-box");
+        let i = 0;
+        for (let level of levels)
+        {
+            if(i != 0)
+            {
+                let selector = ".ac"+i;
+                let flags = document.querySelector(selector).querySelectorAll(".achieve-box");
+                for (let flag of flags) {
+                    new LeaderLine(
+                        flag,level
+                    );
+                }
+            }
+            i++;
+            let selector = ".ac"+i;
+            let flags = document.querySelector(selector).querySelectorAll(".achieve-box");
+            for (let flag of flags){
+                new LeaderLine(
+                    level, flag
+                );
+            }
+        }
+
+        new LeaderLine(
+            document.querySelector(".e1"),
+            document.querySelector(".e2")
+        );
+        new LeaderLine(
+            document.querySelector(".e1"),
+            document.querySelector(".e3")
+        )
+    </script>
+{% endblock %}
